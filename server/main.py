@@ -3,6 +3,8 @@ from wifi import Cell, Scheme
 import json
 import socket
 import subprocess
+import os
+import sys
 
 
 def send(d):
@@ -27,7 +29,7 @@ port = server_sock.getsockname()[1]
 
 uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
 
-advertise_service(server_sock, "SampleServer",
+advertise_service(server_sock, "BluetoothWifiConfig",
                   service_id=uuid,
                   service_classes=[uuid, SERIAL_PORT_CLASS],
                   profiles=[SERIAL_PORT_PROFILE],
@@ -37,6 +39,7 @@ advertise_service(server_sock, "SampleServer",
 
 CELLS = scan()
 shut_down = False
+restart = False
 while not shut_down:
     print("Waiting for connection on RFCOMM channel %d" % port)
     client_sock, client_info = server_sock.accept()
@@ -83,6 +86,8 @@ while not shut_down:
             elif action == "update":
                 out = subprocess.check_output(["git", "pull", "origin", "master"])
                 send({"value": out.decode("utf-8")})
+                shut_down = True
+                restart = True
             elif action == "ifconfig":
                 out = subprocess.check_output(["ifconfig"])
                 send({"value": out.decode("utf-8")})
@@ -99,4 +104,6 @@ while not shut_down:
         client_sock.close()
 
 server_sock.close()
+if restart:
+    os.execv(sys.executable, ['python3'] + sys.argv)
 print("all done")
