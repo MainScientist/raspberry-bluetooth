@@ -64,11 +64,15 @@ while True:
                 except:
                     send({"value": "Something went wrong. Please try again."})
             elif command["action"] == "address":
-                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                s.connect(("8.8.8.8", 80))
-                address = s.getsockname()[0]
-                s.close()
-                send({"value": address})
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                    s.connect(("8.8.8.8", 80))
+                    address = s.getsockname()[0]
+                    send({"value": address})
+                except IOError:
+                    send({"value": "Something went wrong!"})
+                finally:
+                    s.close()
             elif command["action"] == "rescan":
                 CELLS = scan()
                 send({})

@@ -7,11 +7,16 @@ if sys.version < '3':
 
 # search for the SampleServer service
 uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-service_matches = find_service(uuid=uuid, address=None)
 
-if len(service_matches) == 0:
-    print("couldn't find the SampleServer service =(")
-    sys.exit(0)
+attempts = 0
+
+while attempts < 4:
+    service_matches = find_service(uuid=uuid, address=None)
+
+    if len(service_matches) > 0:
+        break
+    attempts += 1
+    print("Could not find server. Trying again... ({})".format(attempts))
 
 first_match = service_matches[0]
 port = first_match["port"]
