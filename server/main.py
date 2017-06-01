@@ -14,7 +14,7 @@ def scan():
     value = []
     print(cells)
     for c in cells:
-        ret[c.ssid.strip()] = c
+        ret[c.ssid.strip().replace(" ", "")] = c
     return ret
 
 
