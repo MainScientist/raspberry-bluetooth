@@ -2,6 +2,7 @@ from bluetooth import *
 from wifi import Cell, Scheme
 import json
 import socket
+import subprocess
 
 
 def send(d):

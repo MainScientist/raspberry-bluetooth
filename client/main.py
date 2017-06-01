@@ -1,7 +1,6 @@
 from bluetooth import *
 import sys
 import json
-import subprocess
 
 if sys.version < '3':
     input = raw_input
