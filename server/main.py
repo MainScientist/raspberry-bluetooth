@@ -9,12 +9,13 @@ def send(d):
 
 
 def scan():
-    global CELLLS
-    CELLS = {}
+    ret = {}
     cells = list(Cell.all("wlan0"))
     value = []
+    print(cells)
     for c in cells:
-        CELLS[c.ssid.strip()] = c
+        ret[c.ssid.strip()] = c
+    return ret
 
 
 server_sock=BluetoothSocket( RFCOMM )
@@ -33,8 +34,7 @@ advertise_service(server_sock, "SampleServer",
                  )
 
 
-CELLS = {}
-scan()
+CELLS = scan()
 while True:
     print("Waiting for connection on RFCOMM channel %d" % port)
     client_sock, client_info = server_sock.accept()
@@ -63,7 +63,7 @@ while True:
                 s.close()
                 send({"value": address})
             elif command["action"] == "rescan":
-                scan()
+                CELLS = scan()
                 send({})
             elif command["action"] == "exit":
                 break
