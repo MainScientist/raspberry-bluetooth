@@ -46,6 +46,10 @@ while True:
         print(response["value"])
     elif action == "connect":
         print(response["value"])
+    elif action == "ifconfig":
+        print(response["value"])
+    elif action == "exec":
+        print(response["value"])
     elif action == "update":
         print(response["value"])
         break

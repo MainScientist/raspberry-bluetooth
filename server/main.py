@@ -97,6 +97,9 @@ while not conditions["shut_down"]:
             elif action == "ifconfig":
                 out = subprocess.check_output(["ifconfig", "wlan0"])
                 send({"value": out.decode("utf-8")})
+            elif action == "exec":
+                out = subprocess.check_output(args)
+                send({"value": out.decode("utf-8")})
             elif action == "exit":
                 break
             elif action == "shut_down":
