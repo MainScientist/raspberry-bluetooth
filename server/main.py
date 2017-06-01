@@ -70,7 +70,7 @@ while not conditions["shut_down"]:
                     send({"value": "Successfully connected to network."})
                 except AssertionError:
                     # Schema already saved
-                    pass
+                    send({"value": "Successfully connected to network."})
                 except:
                     send({"value": "Something went wrong. Please try again."})
 
