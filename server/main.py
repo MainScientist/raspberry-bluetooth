@@ -1,10 +1,6 @@
-# file: rfcomm-server.py
-# auth: Albert Huang <albert@csail.mit.edu>
-# desc: simple demonstration of a server application that uses RFCOMM sockets
-#
-# $Id: rfcomm-server.py 518 2007-08-10 07:20:07Z albert $
-
 from bluetooth import *
+from wifi import Cell
+import json
 
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("", PORT_ANY))
@@ -29,6 +25,13 @@ print("Accepted connection from ", client_info)
 try:
     while True:
         data = client_sock.recv(1024)
+        command = json.loads(data.decode("utf-8"))
+        if command["action"] == "list":
+            cells = list(Cell.all("wlan0"))
+            value = []
+            for c in cells:
+                value.append(c.ssid)
+            client_sock.send(json.dumps({"value": value}).encode("utf-8"))
         if len(data) == 0: break
         print("received [%s]" % data)
 except IOError:
