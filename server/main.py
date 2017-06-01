@@ -37,8 +37,8 @@ class Server:
         for c in cs:
             self.cells[c.ssid.replace(" ", "").strip()] = c
         schs = list(Scheme.all())
-        for i in range(len(schs)):
-            self.schemes[schs[i].name] = schs[i]
+        for s in schs:
+            self.schemes[s.name] = s
 
     def accept(self):
         self.client, client_info = self.socket.accept()
@@ -70,7 +70,7 @@ class Server:
             self.scan()
             value = ["--saved--"]
             for s in self.schemes:
-                value.append(s.name)
+                value.append(s)
             value.append("--scanned--")
             for c in self.cells:
                 value.append(c.ssid)
