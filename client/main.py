@@ -36,22 +36,23 @@ while True:
     sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
     if action == "shut_down": break
     msg = sock.recv(1024*10).decode("utf-8")
-    print(len(msg))
-    print(msg)
     response = json.loads(msg)
-    if action == "list":
-        for e in response["value"]:
-            print(e)
-    elif action == "address":
-        print(response["value"])
-    elif action == "connect":
-        print(response["value"])
-    elif action == "ifconfig":
-        print(response["value"])
-    elif action == "exec":
-        print(response["value"])
-    elif action == "update":
-        print(response["value"])
-        break
+    if "error" in response:
+        print(response["error"])
+    else:
+        if action == "list":
+            for e in response["value"]:
+                print(e)
+        elif action == "test":
+            print(response["value"])
+        elif action == "connect":
+            print(response["value"])
+        elif action == "ifconfig":
+            print(response["value"])
+        elif action == "exec":
+            print(response["value"])
+        elif action == "update":
+            print(response["value"])
+            break
 
 sock.close()
