@@ -38,9 +38,8 @@ advertise_service(server_sock, "BluetoothWifiConfig",
 
 
 CELLS = scan()
-shut_down = False
-restart = False
-while not shut_down:
+conditions = {"shut_down": False, "restart": False}
+while not conditions["shut_down"]:
     print("Waiting for connection on RFCOMM channel %d" % port)
     client_sock, client_info = server_sock.accept()
     print("Accepted connection from ", client_info)
@@ -86,19 +85,20 @@ while not shut_down:
             elif action == "update":
                 out = subprocess.check_output(["git", "pull", "origin", "master"])
                 send({"value": out.decode("utf-8")})
-                shut_down = True
-                restart = True
+
+                conditions["shut_down"] = True
+                conditions["restart"] = True
             elif action == "ifconfig":
                 out = subprocess.check_output(["ifconfig"])
                 send({"value": out.decode("utf-8")})
             elif action == "exit":
                 break
             elif action == "shut_down":
-                shut_down = True
+                conditions["shut_down"] = True
                 break
             print("received [%s]" % data)
-    except IOError:
-        pass
+    except IOError as e:
+        print(e)
     finally:
         print("disconnected")
         client_sock.close()
