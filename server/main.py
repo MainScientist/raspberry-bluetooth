@@ -35,7 +35,8 @@ advertise_service(server_sock, "SampleServer",
 
 
 CELLS = scan()
-while True:
+shut_down = False
+while not shut_down:
     print("Waiting for connection on RFCOMM channel %d" % port)
     client_sock, client_info = server_sock.accept()
     print("Accepted connection from ", client_info)
@@ -44,26 +45,28 @@ while True:
             data = client_sock.recv(1024)
             if len(data) == 0: break
             command = json.loads(data.decode("utf-8"))
-            if command["action"] == "list":
+            action = command["action"]
+            args = command["args"]
+            if action == "list":
                 cells = list(Cell.all("wlan0"))
                 value = []
                 for c in CELLS:
                     value.append(c)
                 send({"value": value})
-            elif command["action"] == "connect":
-                cell = CELLS[command["args"][0]]
-                scheme = Scheme.for_cell('wlan0', 'home', cell, command["args"][1])
+            elif action == "connect":
+                cell = CELLS[args[0]]
+                scheme = Scheme.for_cell('wlan0', 'home', cell, args[1])
                 try:
+                    scheme.activate()
                     scheme.save()
+                    send({"value": "Successfully connected to network."})
                 except AssertionError:
                     # Schema already saved
                     pass
-                try:
-                    scheme.activate()
-                    send({"value": "Successfully connected to network."})
                 except:
                     send({"value": "Something went wrong. Please try again."})
-            elif command["action"] == "address":
+
+            elif action == "address":
                 try:
                     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                     s.connect(("8.8.8.8", 80))
@@ -73,10 +76,16 @@ while True:
                     send({"value": "Something went wrong!"})
                 finally:
                     s.close()
-            elif command["action"] == "rescan":
+            elif action == "rescan":
                 CELLS = scan()
                 send({})
-            elif command["action"] == "exit":
+            elif action == "update":
+                out = subprocess.check_output(["git", "pull", "origin", "master"])
+                send({"value": out.decode("utf-8")})
+            elif action == "exit":
+                break
+            elif action == "shut_down":
+                shut_down = True
                 break
             print("received [%s]" % data)
     except IOError:

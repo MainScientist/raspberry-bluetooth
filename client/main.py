@@ -1,6 +1,7 @@
 from bluetooth import *
 import sys
 import json
+import subprocess
 
 if sys.version < '3':
     input = raw_input
@@ -32,7 +33,7 @@ sock.connect((host, port))
 print("connected.")
 while True:
     action, *args = input("> ").split(" ")
-    if len(action) == 0 or action == "exit": break
+    if len(action) == 0 or action == "exit" or action == "shut_down": break
     sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
     response = json.loads(sock.recv(1024).decode("utf-8"))
     if action == "list":
@@ -41,6 +42,8 @@ while True:
     elif action == "address":
         print(response["value"])
     elif action == "connect":
+        print(response["value"])
+    elif action == "update":
         print(response["value"])
 
 sock.close()
