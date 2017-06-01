@@ -48,7 +48,10 @@ while True:
                 scheme.save()
                 scheme.activate()
             elif command["action"] == "address":
-                address = socket.gethostbyname(socket.gethostname())
+                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                s.connect(("8.8.8.8", 80))
+                address = s.getsockname()[0]
+                s.close()
                 send({"value": address})
             elif command["action"] == "exit":
                 break
