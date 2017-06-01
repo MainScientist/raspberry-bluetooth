@@ -61,7 +61,7 @@ while True:
                 try:
                     scheme.activate()
                     send({"value": "Successfully connected to network."})
-                except ConnectionError:
+                except:
                     send({"value": "Something went wrong. Please try again."})
             elif command["action"] == "address":
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
