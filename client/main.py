@@ -48,5 +48,6 @@ while True:
         print(response["value"])
     elif action == "update":
         print(response["value"])
+        break
 
 sock.close()
