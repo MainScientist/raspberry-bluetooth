@@ -53,7 +53,11 @@ while True:
             elif command["action"] == "connect":
                 cell = CELLS[command["args"][0]]
                 scheme = Scheme.for_cell('wlan0', 'home', cell, command["args"][1])
-                scheme.save()
+                try:
+                    scheme.save()
+                except AssertionError:
+                    # Schema already saved
+                    pass
                 scheme.activate()
                 send({})
             elif command["action"] == "address":
