@@ -76,8 +76,11 @@ class Server:
                 value.append(c)
             self.send({"value": value})
         elif action == "connect":
-            cell = self.cells[args[0]]
-            scheme = Scheme.for_cell('wlan0', args[1], cell, args[1])
+            if args[0] in self.schemes:
+                scheme = self.schemes[args[0]]
+            else:
+                cell = self.cells[args[0]]
+                scheme = Scheme.for_cell('wlan0', args[0], cell, args[1])
             try:
                 scheme.activate()
                 scheme.save()
