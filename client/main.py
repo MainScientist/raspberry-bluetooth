@@ -35,5 +35,7 @@ while True:
             print(e)
     elif action == "address":
         print(response["value"])
+    elif action == "connect":
+        print(response["value"])
 
 sock.close()

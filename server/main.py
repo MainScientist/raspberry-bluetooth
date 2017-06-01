@@ -58,8 +58,11 @@ while True:
                 except AssertionError:
                     # Schema already saved
                     pass
-                scheme.activate()
-                send({})
+                try:
+                    scheme.activate()
+                    send({"value": "Successfully connected to network."})
+                except ConnectionError:
+                    send({"value": "Something went wrong. Please try again."})
             elif command["action"] == "address":
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 s.connect(("8.8.8.8", 80))
