@@ -73,7 +73,7 @@ class Server:
                 value.append(s)
             value.append("--scanned--")
             for c in self.cells:
-                value.append(c.ssid)
+                value.append(c)
             self.send({"value": value})
         elif action == "connect":
             cell = self.cells[args[0]]
