@@ -36,7 +36,7 @@ class Server:
         self.cells = list(Cell.all('wlan0'))
 
     def accept(self):
-        self.client, client_info = server_sock.accept()
+        self.client, client_info = self.socket.accept()
         print("Accepted connection from ", client_info)
         try:
             self.client_loop()
@@ -57,7 +57,7 @@ class Server:
 
     def receive(self):
         # TODO: MORE COMPLEX AND ENCRYPTION
-        data = self.socket.recv(1024)
+        data = self.client.recv(1024)
         return json.loads(data.decode("utf-8"))
 
     def process_command(self, action, args):
@@ -113,7 +113,7 @@ class Server:
 
     def send(self, d):
         msg = json.dumps(d).encode("utf-8")
-        self.socket.send(msg)
+        self.client.send(msg)
 
     def close(self):
         self.socket.close()
