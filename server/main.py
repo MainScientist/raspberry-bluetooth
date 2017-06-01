@@ -69,42 +69,42 @@ class Server:
             value.append("--scanned--")
             for c in self.cells:
                 value.append(c.ssid)
-            send({"value": value})
+            self.send({"value": value})
         elif action == "connect":
             cell = self.cells[args[0]]
             scheme = Scheme.for_cell('wlan0', args[1], cell, args[1])
             try:
                 scheme.activate()
                 scheme.save()
-                send({"value": "Successfully connected and saved network."})
+                self.send({"value": "Successfully connected and saved network."})
             except AssertionError:
                 # Schema already saved
-                send({"value": "Successfully connected to network."})
+                self.send({"value": "Successfully connected to network."})
             except:
-                send({"value": "Something went wrong. Please try again."})
+                self.send({"value": "Something went wrong. Please try again."})
         elif action == "test":
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 s.connect(("8.8.8.8", 80))
                 address = s.getsockname()[0]
-                send({"value": "OK"})
+                self.send({"value": "OK"})
             except IOError:
-                send({"value": "You are not connected to the internet."})
+                self.send({"value": "You are not connected to the internet."})
             finally:
                 s.close()
         elif action == "update":
             out = subprocess.check_output(["git", "pull", "origin", "master"])
-            send({"value": out.decode("utf-8")})
+            self.send({"value": out.decode("utf-8")})
 
             self.exit = True
             self.shut_down = True
             self.restart = True
         elif action == "ifconfig":
             out = subprocess.check_output(["ifconfig", "wlan0"])
-            send({"value": out.decode("utf-8")})
+            self.send({"value": out.decode("utf-8")})
         elif action == "exec":
             out = subprocess.check_output(args)
-            send({"value": out.decode("utf-8")})
+            self.send({"value": out.decode("utf-8")})
         elif action == "exit":
             self.exit = True
         elif action == "shut_down":
