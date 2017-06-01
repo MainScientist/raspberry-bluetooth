@@ -15,7 +15,7 @@ class Server:
         self.socket.listen(1)
         self.uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
         self.cells = {}
-        self.schemes = list(Scheme.all())
+        self.schemes = {}
         self.shut_down = False
         self.client = None
         self.exit = False
@@ -33,7 +33,12 @@ class Server:
             self.accept()
 
     def scan(self):
-        self.cells = list(Cell.all('wlan0'))
+        cs = list(Cell.all('wlan0'))
+        for c in cs:
+            self.cells[c.ssid.replace(" ", "").strip()] = c
+        schs = list(Scheme.all())
+        for s in schs:
+            self.schemes[s.name] = s
 
     def accept(self):
         self.client, client_info = self.socket.accept()
