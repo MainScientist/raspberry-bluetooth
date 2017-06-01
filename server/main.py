@@ -8,7 +8,9 @@ import sys
 
 
 def send(d):
-    client_sock.send(json.dumps(d).encode("utf-8"))
+    msg = json.dumps(d).encode("utf-8")
+    print(msg)
+    client_sock.send(msg)
 
 
 def scan():

@@ -32,9 +32,13 @@ sock.connect((host, port))
 print("connected.")
 while True:
     action, *args = input("> ").split(" ")
-    if len(action) == 0 or action == "exit" or action == "shut_down": break
+    if len(action) == 0 or action == "exit": break
     sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
-    response = json.loads(sock.recv(1024).decode("utf-8"))
+    if action == "shut_down": break
+    msg = sock.recv(1024*10).decode("utf-8")
+    print(len(msg))
+    print(msg)
+    response = json.loads(msg)
     if action == "list":
         for e in response["value"]:
             print(e)
