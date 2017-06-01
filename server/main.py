@@ -104,6 +104,6 @@ while not conditions["shut_down"]:
         client_sock.close()
 
 server_sock.close()
-if restart:
+if conditions["restart"]:
     os.execv(sys.executable, ['python3'] + sys.argv)
 print("all done")
