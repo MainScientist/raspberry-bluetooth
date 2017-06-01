@@ -26,12 +26,14 @@ sock.connect((host, port))
 
 print("connected.")
 while True:
-    action, args* = input("> ").split(" ")
-    if len(action) == 0: break
+    action, *args = input("> ").split(" ")
+    if len(action) == 0 or action == "exit": break
     sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
     response = json.loads(sock.recv(1024).decode("utf-8"))
     if action == "list":
         for e in response["value"]:
             print(e)
+    elif action == "address":
+        print(response["value"])
 
 sock.close()

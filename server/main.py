@@ -1,6 +1,12 @@
 from bluetooth import *
 from wifi import Cell, Scheme
 import json
+import socket
+
+
+def send(d):
+    client_sock.send(json.dumps(d).encode("utf-8"))
+
 
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("", PORT_ANY))
@@ -35,12 +41,15 @@ while True:
                 for c in cells:
                     CELLS[c.ssid] = c
                     value.append(c.ssid)
-                client_sock.send(json.dumps({"value": value}).encode("utf-8"))
+                send({"value": value})
             elif command["action"] == "connect":
                 cell = CELLS[command["args"][0]]
                 scheme = Scheme.for_cell('wlan0', 'home', cell, command["args"][1])
                 scheme.save()
                 scheme.activate()
+            elif command["action"] == "address":
+                address = socket.gethostbyname(socket.gethostname())
+                send({"value": address})
             elif command["action"] == "exit":
                 break
             print("received [%s]" % data)
