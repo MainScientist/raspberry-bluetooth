@@ -47,10 +47,10 @@ class Server:
             self.client.close()
 
     def client_loop(self):
-        command = self.receive()
         self.exit = False
         while not self.exit:
             try:
+                command = self.receive()
                 self.process_command(command["action"], command["args"])
             except Exception as e:
                 self.send({"error": str(e)})
@@ -113,6 +113,7 @@ class Server:
 
     def send(self, d):
         msg = json.dumps(d).encode("utf-8")
+        print(msg)
         self.client.send(msg)
 
     def close(self):

@@ -36,6 +36,7 @@ while True:
     sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
     if action == "shut_down": break
     msg = sock.recv(1024*10).decode("utf-8")
+    print(msg)
     response = json.loads(msg)
     if "error" in response:
         print(response["error"])
