@@ -21,6 +21,7 @@ def scan():
     return ret
 
 
+print("Running server...")
 server_sock=BluetoothSocket( RFCOMM )
 server_sock.bind(("", PORT_ANY))
 server_sock.listen(1)
@@ -40,6 +41,7 @@ advertise_service(server_sock, "BluetoothWifiConfig",
 CELLS = scan()
 conditions = {"shut_down": False, "restart": False}
 while not conditions["shut_down"]:
+    print(conditions)
     print("Waiting for connection on RFCOMM channel %d" % port)
     client_sock, client_info = server_sock.accept()
     print("Accepted connection from ", client_info)
