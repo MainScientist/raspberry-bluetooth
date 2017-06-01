@@ -82,11 +82,12 @@ class Server:
                 cell = self.cells[args[0]]
                 scheme = Scheme.for_cell('wlan0', args[0], cell, args[1])
             try:
-                scheme.activate()
                 scheme.save()
-                self.send({"value": "Successfully connected and saved network."})
             except AssertionError:
                 # Schema already saved
+
+            try:
+                scheme.activate()
                 self.send({"value": "Successfully connected to network."})
             except Exception as e:
                 self.send({"value": "{} Please try again.".format(e)})
