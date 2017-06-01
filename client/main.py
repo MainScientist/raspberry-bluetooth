@@ -7,7 +7,7 @@ if sys.version < '3':
 
 # search for the SampleServer service
 uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
-service_matches = find_service(uuid = uuid)
+service_matches = find_service(uuid=uuid, address=None)
 
 if len(service_matches) == 0:
     print("couldn't find the SampleServer service =(")
@@ -24,12 +24,14 @@ print("connecting to \"%s\" on %s" % (name, host))
 sock=BluetoothSocket(RFCOMM)
 sock.connect((host, port))
 
-print("connected.  type stuff")
+print("connected.")
 while True:
-    data = input()
-    if len(data) == 0: break
-    sock.send(json.dumps({"command": data}).encode("utf-8"))
-    response = sock.recv(1024)
-    print(response)
+    action, args* = input("> ").split(" ")
+    if len(action) == 0: break
+    sock.send(json.dumps({"action": action, "args": args}).encode("utf-8"))
+    response = json.loads(sock.recv(1024).decode("utf-8"))
+    if action == "list":
+        for e in response["value"]:
+            print(e)
 
 sock.close()
