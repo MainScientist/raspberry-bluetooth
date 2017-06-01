@@ -38,8 +38,7 @@ class Server:
             self.cells[c.ssid.replace(" ", "").strip()] = c
         schs = list(Scheme.all())
         for i in range(len(schs)):
-            s = schs[i]
-            self.schemes[s.name] = s
+            self.schemes[schs[i].name] = schs[i]
 
     def accept(self):
         self.client, client_info = self.socket.accept()
