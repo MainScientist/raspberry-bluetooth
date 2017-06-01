@@ -88,8 +88,8 @@ class Server:
             except AssertionError:
                 # Schema already saved
                 self.send({"value": "Successfully connected to network."})
-            except:
-                self.send({"value": "Something went wrong. Please try again."})
+            except Exception as e:
+                self.send({"value": "{} Please try again.".format(e)})
         elif action == "test":
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -118,6 +118,8 @@ class Server:
         elif action == "shut_down":
             self.exit = True
             self.shut_down = True
+        else:
+            self.send({"error": "Command does not exist."})
 
     def send(self, d):
         msg = json.dumps(d).encode("utf-8")
