@@ -90,6 +90,7 @@ while not conditions["shut_down"]:
 
                 conditions["shut_down"] = True
                 conditions["restart"] = True
+                break
             elif action == "ifconfig":
                 out = subprocess.check_output(["ifconfig"])
                 send({"value": out.decode("utf-8")})
@@ -102,6 +103,7 @@ while not conditions["shut_down"]:
     except IOError as e:
         print(e)
     finally:
+        print(conditions)
         print("disconnected")
         client_sock.close()
 
