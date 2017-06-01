@@ -37,7 +37,8 @@ class Server:
         for c in cs:
             self.cells[c.ssid.replace(" ", "").strip()] = c
         schs = list(Scheme.all())
-        for s in schs:
+        for i in range(len(schs)):
+            s = schs[i]
             self.schemes[s.name] = s
 
     def accept(self):
