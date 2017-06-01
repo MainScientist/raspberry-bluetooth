@@ -83,6 +83,9 @@ while not shut_down:
             elif action == "update":
                 out = subprocess.check_output(["git", "pull", "origin", "master"])
                 send({"value": out.decode("utf-8")})
+            elif action == "ifconfig":
+                out = subprocess.check_output(["ifconfig"])
+                send({"value": out.decode("utf-8")})
             elif action == "exit":
                 break
             elif action == "shut_down":
