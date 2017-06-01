@@ -24,8 +24,8 @@ class Server:
         print("Running server")
         port = self.socket.getsockname()[1]
         advertise_service(self.socket, "BluetoothWifiConfig",
-                          service_id=uuid,
-                          service_classes=[uuid, SERIAL_PORT_CLASS],
+                          service_id=self.uuid,
+                          service_classes=[self.uuid, SERIAL_PORT_CLASS],
                           profiles=[SERIAL_PORT_PROFILE]
                          )
         self.scan()
