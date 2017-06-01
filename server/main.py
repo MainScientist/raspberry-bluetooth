@@ -50,6 +50,7 @@ while not conditions["shut_down"]:
             data = client_sock.recv(1024)
             if len(data) == 0: break
             command = json.loads(data.decode("utf-8"))
+            print(command)
             action = command["action"]
             args = command["args"]
             if action == "list":
