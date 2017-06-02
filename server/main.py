@@ -90,6 +90,7 @@ class Server:
             except AssertionError:
                 # Schema already saved
                 pass
+
             try:
                 scheme.activate()
                 self.send({"value": "Successfully connected to network."})
@@ -107,7 +108,7 @@ class Server:
                 s.close()
         elif action == "update":
             out = self.g.pull()
-            self.send({"value": out.decode("utf-8")})
+            self.send({"value": out})
 
             self.exit = True
             self.shut_down = True
