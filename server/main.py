@@ -89,7 +89,7 @@ class Server:
                 scheme.save()
             except AssertionError:
                 # Schema already saved
-
+                pass
             try:
                 scheme.activate()
                 self.send({"value": "Successfully connected to network."})
