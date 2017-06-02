@@ -5,6 +5,8 @@ import socket
 import subprocess
 import os
 import sys
+import git
+import os
 
 
 class Server:
@@ -19,6 +21,8 @@ class Server:
         self.shut_down = False
         self.client = None
         self.exit = False
+        dir_path = os.path.dirname(os.path.realpath(__file__))
+        self.g = git.cmd.Git(dir_path)
 
     def serve(self):
         print("Running server")
@@ -102,7 +106,7 @@ class Server:
             finally:
                 s.close()
         elif action == "update":
-            out = subprocess.check_output(["git", "pull", "origin", "master"])
+            out = self.g.pull()
             self.send({"value": out.decode("utf-8")})
 
             self.exit = True
